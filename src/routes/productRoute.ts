@@ -1,0 +1,60 @@
+import express from "express";
+import {
+  addProduct,
+  deleteProduct,
+  getProductById,
+  getProducts,
+  updateProduct,
+} from "../services/productService";
+
+const router = express.Router();
+
+router.get("/", async (req, res) => {
+  try {
+    const products = await getProducts();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch products", error });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await getProductById(req.params.id);
+    if (!product) return res.status(404).json({ message: "product not found" });
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch product", error });
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const product = await addProduct(req.body);
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(400).json({ message: "Failed to add product", error });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const updated = await updateProduct(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ message: "Product not found" });
+    res.json(updated);
+  } catch (error) {
+    res.status(400).json({ message: "Failed to update product", error });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleted = await deleteProduct(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "Product not found" });
+    res.json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete product", error });
+  }
+});
+
+export default router;
