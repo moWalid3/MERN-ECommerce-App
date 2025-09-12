@@ -1,5 +1,9 @@
 import express from "express";
-import { addToCart, getActiveCart } from "../services/cartService";
+import {
+  addToCart,
+  getActiveCart,
+  updateCartItem,
+} from "../services/cartService";
 import validateJWT from "../middlewares/validateJWT";
 import { ExtendRequest } from "../types/extendedRequest";
 
@@ -30,6 +34,24 @@ router.post("/items", validateJWT, async (req: ExtendRequest, res) => {
     res.status(201).json(result.data);
   } catch (error) {
     res.status(500).json({ message: "Failed to add to cart", error });
+  }
+});
+
+router.put("/items", validateJWT, async (req: ExtendRequest, res) => {
+  const { productId, quantity } = req.body;
+  try {
+    const result = await updateCartItem({
+      userId: req.user._id,
+      productId,
+      quantity,
+    });
+
+    if (result.status >= 400)
+      return res.status(result.status).json({ message: result.data });
+
+    res.json(result.data);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update cart item", error });
   }
 });
 
