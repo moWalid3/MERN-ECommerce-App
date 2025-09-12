@@ -156,10 +156,16 @@ export const checkout = async ({ userId, address }: Checkout) => {
 
   const orderItems: IOrderItem[] = [];
 
+  const productIds = cart.items.map((item) => item.productId);
+  const products = await productModel.find({ _id: productIds });
+
   for (const item of cart.items) {
-    const product = await productModel.findById(item.productId);
+    const product = products.find((p) => p._id == item.productId);
 
     if (!product) return { status: 400, data: "Product not found!" };
+
+    product.stock -= item.quantity;
+    await product.save();
 
     orderItems.push({
       title: product.title,

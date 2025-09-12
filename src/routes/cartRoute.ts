@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get("/", validateJWT, async (req: ExtendRequest, res) => {
   try {
-    const cart = await getActiveCart({ userId: req.user._id });
+    const cart = await getActiveCart({ userId: req.user?._id });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
     res.json(cart);
   } catch (error) {
@@ -24,7 +24,7 @@ router.get("/", validateJWT, async (req: ExtendRequest, res) => {
 
 router.delete("/", validateJWT, async (req: ExtendRequest, res) => {
   try {
-    const cart = await clearCart(req.user?.id);
+    const cart = await clearCart(req.user?._id);
     if (!cart) return res.status(404).json({ message: "Cart not found!" });
     res.json(cart);
   } catch (error) {
@@ -54,7 +54,7 @@ router.put("/items", validateJWT, async (req: ExtendRequest, res) => {
   const { productId, quantity } = req.body;
   try {
     const result = await updateCartItem({
-      userId: req.user._id,
+      userId: req.user?._id,
       productId,
       quantity,
     });

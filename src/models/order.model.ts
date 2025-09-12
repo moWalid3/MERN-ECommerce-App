@@ -24,10 +24,10 @@ const orderItemSchema = new Schema<IOrderItem>({
 });
 
 const orderSchema = new Schema<IOrder>({
-  userId: { type: Schema.Types.ObjectId, ref: "users", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   items: [orderItemSchema],
   total: { type: Number, required: true, min: 0 },
   address: { type: String, required: true },
 });
 
-export const orderModel = mongoose.model<IOrder>("orders", orderSchema);
+export const orderModel = mongoose.model<IOrder>("Order", orderSchema);

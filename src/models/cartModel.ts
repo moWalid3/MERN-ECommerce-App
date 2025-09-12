@@ -15,17 +15,17 @@ export interface ICart extends Document {
 }
 
 const cartItemSchema = new Schema<ICartItem>({
-  productId: { type: Schema.Types.ObjectId, ref: "products", required: true },
+  productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
   quantity: { type: Number, default: 1, min: 1, required: true },
 });
 
 const cartSchema = new Schema<ICart>({
-  userId: { type: Schema.Types.ObjectId, ref: "users", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   items: [cartItemSchema],
   totalAmount: { type: Number, default: 0, required: true },
   status: { type: String, enum: CartStatusEnum, default: "active" },
 });
 
-const cartModel = mongoose.model<ICart>("cart", cartSchema);
+const cartModel = mongoose.model<ICart>("Cart", cartSchema);
 
 export default cartModel;
