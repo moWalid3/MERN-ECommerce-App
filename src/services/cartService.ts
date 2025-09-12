@@ -32,12 +32,9 @@ export const addToCart = async ({ userId, productId, quantity }: AddToCart) => {
     };
   }
 
-  let cart = await cartModel.findOne({ userId, status: "active" });
+  const cart = await cartModel.findOne({ userId, status: "active" });
 
   if (!cart) {
-    const product = await productModel.findById(productId);
-    if (!product) return { status: 404, data: "Product not found!" };
-
     const newCart = await cartModel.create({
       userId,
       items: [{ productId, quantity }],
@@ -98,13 +95,40 @@ export const updateCartItem = async ({
   if (itemIndex == -1 || !cart.items[itemIndex]) {
     return { status: 400, data: "Item does not exist in cart" };
   }
-  
+
   const oldTotalItemPrice = product.price * cart.items[itemIndex].quantity;
   cart.totalAmount -= oldTotalItemPrice;
   const newTotalItemPrice = product.price * quantity;
   cart.totalAmount += newTotalItemPrice;
 
   cart.items[itemIndex].quantity = quantity;
+  const updatedCart = await cart.save();
+  return { status: 200, data: updatedCart };
+};
+
+interface DeleteCartItem {
+  productId: string;
+  userId: string;
+}
+export const deleteCartItem = async ({ productId, userId }: DeleteCartItem) => {
+  const cart = await cartModel.findOne({ userId, status: "active" });
+
+  if (!cart) return { status: 404, data: "Cart not found!" };
+
+  const product = await productModel.findById(productId);
+
+  if (!product) return { status: 404, data: "Product not found!" };
+
+  const itemIndex = cart.items.findIndex(
+    (item) => item.productId.toString() === productId
+  );
+
+  if (itemIndex == -1 || !cart.items[itemIndex]) {
+    return { status: 400, data: "Item does not exist in cart" };
+  }
+
+  cart.totalAmount -= cart.items[itemIndex].quantity * product.price;
+  cart.items.splice(itemIndex, 1);
   const updatedCart = await cart.save();
   return { status: 200, data: updatedCart };
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addToCart,
+  deleteCartItem,
   getActiveCart,
   updateCartItem,
 } from "../services/cartService";
@@ -54,5 +55,27 @@ router.put("/items", validateJWT, async (req: ExtendRequest, res) => {
     res.status(500).json({ message: "Failed to update cart item", error });
   }
 });
+
+router.delete(
+  "/items/:productId",
+  validateJWT,
+  async (req: ExtendRequest, res) => {
+    const { productId } = req.params;
+
+    if (!productId)
+      return res.status(400).json({ message: "Missing required productId" });
+    
+    try {
+      const result = await deleteCartItem({ userId: req.user?._id, productId });
+
+      if (result.status >= 400)
+        return res.status(result.status).json({ message: result.data });
+
+      res.json(result.data);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to delete cart item", error });
+    }
+  }
+);
 
 export default router;
