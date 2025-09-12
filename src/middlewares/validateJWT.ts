@@ -16,25 +16,21 @@ const validateJWT = (req: ExtendRequest, res: Response, next: NextFunction) => {
     return res.status(403).json({ message: "Bearer token not found" });
   }
 
-  jwt.verify(
-    token,
-    "SKLJ*Jfjasi2ojf@#r21iojr12kljjk@fks",
-    async (error, payload) => {
-      if (error) {
-        return res.status(403).json({ message: "Invalid token" });
-      }
-
-      if (!payload) {
-        return res.status(403).json({ message: "Invalid token payload" });
-      }
-
-      const userPayload = payload as { name: string; email: string };
-
-      const user = await userModel.findOne({ email: userPayload.email });
-      req.user = user;
-      next();
+  jwt.verify(token, process.env.JWT_SECRET || "", async (error, payload) => {
+    if (error) {
+      return res.status(403).json({ message: "Invalid token" });
     }
-  );
+
+    if (!payload) {
+      return res.status(403).json({ message: "Invalid token payload" });
+    }
+
+    const userPayload = payload as { name: string; email: string };
+
+    const user = await userModel.findOne({ email: userPayload.email });
+    req.user = user;
+    next();
+  });
 };
 
 export default validateJWT;

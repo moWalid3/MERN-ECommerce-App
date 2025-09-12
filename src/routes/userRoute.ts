@@ -5,14 +5,30 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   const data = req.body;
-  const result = await register(data);
-  res.status(result.statusCode).send(result.data);
+  try {
+    const result = await register(data);
+
+    if (result.status >= 400)
+      res.status(result.status).json({ message: result.data });
+
+    res.status(200).json({ token: result.data });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to register", error });
+  }
 });
 
 router.post("/login", async (req, res) => {
   const data = req.body;
-  const result = await login(data);
-  res.status(result.statusCode).send(result.data);
+  try {
+    const result = await login(data);
+
+    if (result.status >= 400)
+      res.status(result.status).json({ message: result.data });
+
+    res.status(200).json({ token: result.data });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to login", error });
+  }
 });
 
 export default router;
