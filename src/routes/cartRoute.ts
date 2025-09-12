@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addToCart,
+  clearCart,
   deleteCartItem,
   getActiveCart,
   updateCartItem,
@@ -17,6 +18,16 @@ router.get("/", validateJWT, async (req: ExtendRequest, res) => {
     res.json(cart);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch cart", error });
+  }
+});
+
+router.delete("/", validateJWT, async (req: ExtendRequest, res) => {
+  try {
+    const cart = await clearCart(req.user?.id);
+    if (!cart) return res.status(404).json({ message: "Cart not found!" });
+    res.json(cart);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to clear cart", error });
   }
 });
 
@@ -64,7 +75,7 @@ router.delete(
 
     if (!productId)
       return res.status(400).json({ message: "Missing required productId" });
-    
+
     try {
       const result = await deleteCartItem({ userId: req.user?._id, productId });
 

@@ -132,3 +132,11 @@ export const deleteCartItem = async ({ productId, userId }: DeleteCartItem) => {
   const updatedCart = await cart.save();
   return { status: 200, data: updatedCart };
 };
+
+export const clearCart = async (userId: string) => {
+  return await cartModel.findOneAndUpdate(
+    { userId, status: "active" },
+    { $set: { items: [], totalAmount: 0 } },
+    { new: true }
+  );
+};
