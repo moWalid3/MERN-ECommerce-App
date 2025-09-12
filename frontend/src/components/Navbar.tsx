@@ -23,7 +23,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" color='warning'>
+    <AppBar position="static" color='secondary' sx={{background: "#37353E", boxShadow: "none"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <ShoppingBagRoundedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 35 }} />
