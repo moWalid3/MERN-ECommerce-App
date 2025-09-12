@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addToCart,
+  checkout,
   clearCart,
   deleteCartItem,
   getActiveCart,
@@ -88,5 +89,21 @@ router.delete(
     }
   }
 );
+
+router.post("/checkout", validateJWT, async (req: ExtendRequest, res) => {
+  try {
+    const result = await checkout({
+      userId: req.user?._id,
+      address: req.body.address,
+    });
+    
+    if (result.status >= 400)
+      return res.status(result.status).json({ message: result.data });
+
+    res.json(result.data);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to checkout" });
+  }
+});
 
 export default router;

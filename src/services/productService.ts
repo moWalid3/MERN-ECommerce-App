@@ -36,7 +36,6 @@ export const seedInitialProducts = async () => {
       image: "https://m.media-amazon.com/images/I/81p5n9MO4QL._AC_SL1500_.jpg",
       price: 2499,
       stock: 10,
-      quantity: 15,
     },
     {
       title: "Samsung 27-inch 4K Monitor",
@@ -45,7 +44,6 @@ export const seedInitialProducts = async () => {
       image: "https://m.media-amazon.com/images/I/81U-QW2ZqyL._AC_SL1500_.jpg",
       price: 399,
       stock: 25,
-      quantity: 33,
     },
     {
       title: "Sony WH-1000XM5",
@@ -54,7 +52,6 @@ export const seedInitialProducts = async () => {
       image: "https://m.media-amazon.com/images/I/41JACWT-wWL._AC_SL1200_.jpg",
       price: 399,
       stock: 20,
-      quantity: 26,
     },
   ];
 
