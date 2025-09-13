@@ -6,6 +6,7 @@ interface IAuthContext {
   token: string | null;
   login: (formData: ILoginForm) => Promise<string[] | null>;
   register: (formData: IRegisterForm) => Promise<string[] | null>;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -13,6 +14,7 @@ export const AuthContext = createContext<IAuthContext>({
   token: null,
   login: async () => null,
   register: async () => null,
+  logout: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);

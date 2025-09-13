@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/auth/AuthContext';
 
 function Navbar() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
 
   return (
     <AppBar position="static" color='secondary' sx={{background: "#37353E", boxShadow: "none"}}>
@@ -31,7 +31,10 @@ function Navbar() {
 
             <Box sx={{flexGrow: 1, display: "flex", justifyContent: "flex-end"}}>
               {
-                token ? <Button color='inherit' sx={{ my: 2, color: 'white' }}>Logout</Button> 
+                token ?
+                  <Link onClick={logout} to="/login">
+                    <Button color='inherit' sx={{ my: 2, color: 'white' }}>Logout</Button> 
+                  </Link>
                 : <>
                   <Link to="/login">
                     <Button color='inherit' sx={{ my: 2, color: 'white' }}>Login</Button>

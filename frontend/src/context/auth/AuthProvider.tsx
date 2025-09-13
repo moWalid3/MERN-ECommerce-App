@@ -66,8 +66,15 @@ const AuthProvider = (props: PropsWithChildren) => {
     return errorsMsg;
   };
 
+  const logout = () => {
+    setToken(null);
+    setUsername(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+  };
+
   return (
-    <AuthContext.Provider value={{ token, username, login, register }}>
+    <AuthContext.Provider value={{ token, username, login, register, logout }}>
       {props.children}
     </AuthContext.Provider>
   );
