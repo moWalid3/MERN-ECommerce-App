@@ -49,7 +49,7 @@ function Navbar() {
                   <Link to="/cart">
                     <IconButton color='inherit' sx={{color: 'white', mr: 2}}>
                       <AddShoppingCartIcon />
-                      <CartBadge badgeContent={cart ? cart.items.length : '0'} color='info' overlap="circular" />
+                      <CartBadge badgeContent={cart ? cart.items.length.toString() : '0'} color='info' overlap="circular" />
                     </IconButton>
                   </Link>
                   <Link onClick={logout} to="/login">

@@ -1,50 +1,40 @@
-import { useEffect } from "react";
-import toast from 'react-hot-toast';
+import { useCart } from "../context/cart/CartContext";
+import type { IProduct } from "../types/Product";
 
 const CartPage = () => {
+  const { cart } = useCart();
 
-  useEffect(() => {
-    toast('Here is your toast.');
-    // getCart();
-  }, [])
+  // todo fix -> refetch get cart to do populate and get all products
 
-  const getCart = async () => {
-  
-  }
-
-  return <>
-  <h2 className="head-title">Cart</h2>
-    <table className="cart">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Title</th>
-          <th>Price</th>
-          <th>Quantity</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Image 1</td>
-          <td>Title 3</td>
-          <td>$300</td>
-          <td>5</td>
-        </tr>
-        <tr>
-          <td>Image 1</td>
-          <td>Title 3</td>
-          <td>$300</td>
-          <td>5</td>
-        </tr>
-        <tr>
-          <td>Image 1</td>
-          <td>Title 3</td>
-          <td>$300</td>
-          <td>5</td>
-        </tr>
-      </tbody>
-    </table>
-  </>
-}
+  return (
+    <>
+      {cart && (
+        <>
+          <h2 className="head-title">Cart</h2>
+          <table className="cart">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.items.length > 0 && cart.items.map(item =>
+                <tr key={item._id}>
+                  <td><img src={(item.productId as IProduct).image} /></td>
+                  <td>{ (item.productId as IProduct).title }</td>
+                  <td>${ (item.productId as IProduct).price }</td>
+                  <td>{ item.quantity }</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </>
+      )}
+    </>
+  );
+};
 
 export default CartPage;
