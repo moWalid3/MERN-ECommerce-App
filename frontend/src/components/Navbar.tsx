@@ -10,6 +10,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import ShoppingBagRoundedIcon from '@mui/icons-material/ShoppingBagRounded';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -26,12 +27,14 @@ function Navbar() {
     <AppBar position="static" color='secondary' sx={{background: "#37353E", boxShadow: "none"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <ShoppingBagRoundedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 35 }} />
-          <Typography variant="h6" noWrap component="a"
-            sx={{ mr: 3, display: { xs: 'none', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem'}}
-          >
-            TECH
-          </Typography>
+          <Link to="/" className='logo-link'>
+            <ShoppingBagRoundedIcon sx={{ mr: 1, fontSize: 35 }} />
+            <Typography variant="h6" noWrap
+              sx={{ mr: 3, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem'}}
+            >
+              TECH
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton size="large" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleOpenNavMenu} color='inherit'>
@@ -75,24 +78,29 @@ function Navbar() {
           </Typography>
           
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
-              Home
-            </Button>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
+            <Link to="/">
+              <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
+                Home
+              </Button>
+            </Link>
+            <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
               Products
             </Button>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
+            <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
               Cart
             </Button>
 
             <Box sx={{flexGrow: 1, display: "flex", justifyContent: "flex-end"}}>
-              <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
+              <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
                 Login
               </Button>
 
-              <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
-                Register
-              </Button>
+              <Link to="/register">
+                <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
+                  Register
+                </Button>
+              </Link>
+
             </Box>
           </Box>
         </Toolbar>
