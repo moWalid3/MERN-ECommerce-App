@@ -11,6 +11,7 @@ import { IconButton } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { styled } from '@mui/material/styles';
 import Badge, { badgeClasses } from '@mui/material/Badge';
+import { useCart } from '../context/cart/CartContext';
 
 const CartBadge = styled(Badge)`
   & .${badgeClasses.badge} {
@@ -21,6 +22,7 @@ const CartBadge = styled(Badge)`
 
 function Navbar() {
   const { token, logout } = useAuth();
+  const { cart } = useCart();
 
   return (
     <AppBar position="static" color='secondary' sx={{background: "#37353E", boxShadow: "none"}}>
@@ -47,7 +49,7 @@ function Navbar() {
                   <Link to="/cart">
                     <IconButton color='inherit' sx={{color: 'white', mr: 2}}>
                       <AddShoppingCartIcon />
-                      <CartBadge badgeContent={2} color='info' overlap="circular" />
+                      <CartBadge badgeContent={cart ? cart.items.length : '0'} color='info' overlap="circular" />
                     </IconButton>
                   </Link>
                   <Link onClick={logout} to="/login">

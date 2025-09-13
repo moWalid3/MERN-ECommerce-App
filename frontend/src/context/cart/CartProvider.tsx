@@ -1,12 +1,38 @@
-import { useState, type PropsWithChildren } from "react";
+import { useEffect, useState, type PropsWithChildren } from "react";
 import { CartContext } from "./CartContext";
 import { useAuth } from "../auth/AuthContext";
 import { BASE_URL } from "../../constants/baseUrl";
 import type { IAddCartItem, ICart } from "../../types/Cart";
+import toast from "react-hot-toast";
 
 const CartProvider = (props: PropsWithChildren) => {
   const [cart, setCart] = useState<ICart | null>(null);
   const { token } = useAuth();
+
+  useEffect(() => {
+    const fetchCart =  async () => {
+      if(token) {
+        try {
+          const res = await fetch(`${BASE_URL}/cart`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+          console.log(data);
+
+          if(res.ok) {
+            setCart(data);
+          }
+        } catch (error) {
+          console.error(error);
+          toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
+        }
+      } else {
+        setCart(null);
+      }
+    };
+
+    fetchCart();
+  }, [token]);
 
   const addCartItem = async (data: IAddCartItem) => {
     try {
@@ -23,7 +49,6 @@ const CartProvider = (props: PropsWithChildren) => {
 
       if(res.ok) {
         setCart(result);
-        console.log("result from context", result);
         return null;
       }
 
@@ -34,9 +59,8 @@ const CartProvider = (props: PropsWithChildren) => {
     }
   };
 
-
   return (
-    <CartContext.Provider value={{ addCartItem }}>{props.children}</CartContext.Provider>
+    <CartContext.Provider value={{ addCartItem, cart }}>{props.children}</CartContext.Provider>
   );
 };
 

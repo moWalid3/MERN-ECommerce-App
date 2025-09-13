@@ -1,11 +1,13 @@
 import { createContext, useContext } from "react";
-import type { IAddCartItem } from "../../types/Cart";
+import type { IAddCartItem, ICart } from "../../types/Cart";
 
 interface ICartContext {
-  addCartItem: (data: IAddCartItem) => Promise<null | string>
+  cart: ICart | null;
+  addCartItem: (data: IAddCartItem) => Promise<null | string>;
 }
 
 export const CartContext = createContext<ICartContext>({
-  addCartItem: async () => null
+  cart: null,
+  addCartItem: async () => null,
 });
 export const useCart = () => useContext(CartContext);
