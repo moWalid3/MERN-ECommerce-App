@@ -1,24 +1,29 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import Navbar from "./components/Navbar";
-import Container from "@mui/material/Container";
 import RegisterPage from "./pages/RegisterPage";
 import AuthProvider from "./context/auth/AuthProvider";
+import LoginPage from "./pages/LoginPage";
+import LoadingProvider from "./context/loading/LoadingProvider";
+import Layout from "./layout/Layout";
 
 function App() {
   return (
     <>
-      <AuthProvider>
-        <BrowserRouter>
-          <Navbar />
-          <Container maxWidth="xl" sx={{ py: 5 }}>
+      <LoadingProvider>
+        <AuthProvider>
+
+          <BrowserRouter>
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/" element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route path="register" element={<RegisterPage />} />
+                <Route path="login" element={<LoginPage />} />
+              </Route>
             </Routes>
-          </Container>
-        </BrowserRouter>
-      </AuthProvider>
+          </BrowserRouter>
+          
+        </AuthProvider>
+      </LoadingProvider>
     </>
   );
 }

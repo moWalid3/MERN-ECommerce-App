@@ -4,6 +4,7 @@ import { useAuth } from "../context/auth/AuthContext";
 import type { IRegisterForm } from "../types/Auth";
 import Joi from "joi";
 import { useNavigate } from "react-router-dom";
+import { useLoading } from "../context/loading/LoadingContext";
 
 const RegisterPage = () => {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -13,7 +14,8 @@ const RegisterPage = () => {
   const [generalErrors, setGeneralErrors] = useState<string[]>([]);
   
   const navigate = useNavigate();
-  const auth = useAuth();
+  const { register } = useAuth();
+  const { setIsLoading } = useLoading();
 
   const registerSchema = Joi.object({
     name: Joi.string().alphanum().min(3).max(100).required().messages({
@@ -53,8 +55,10 @@ const RegisterPage = () => {
       return;
     }
     
-    const result = await auth?.register(formData);
-
+    setIsLoading(true);
+    const result = await register(formData);
+    
+    setIsLoading(false);
     if(result != null) {
       setGeneralErrors([...result])
       return;
@@ -85,7 +89,7 @@ const RegisterPage = () => {
     >
       {
         generalErrors.length > 0 && <Alert severity="error" sx={{width: "100%", border: "1px solid #FF8488"}}>
-          <ul>{ generalErrors.map(err => <li>{err}</li> ) }</ul>
+          <ul>{ generalErrors.map((err, i) => <li key={i}>{err}</li> ) }</ul>
         </Alert>
       }
       

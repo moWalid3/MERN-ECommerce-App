@@ -1,27 +1,15 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import ShoppingBagRoundedIcon from '@mui/icons-material/ShoppingBagRounded';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/auth/AuthContext';
 
 function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const { token } = useAuth();
 
   return (
     <AppBar position="static" color='secondary' sx={{background: "#37353E", boxShadow: "none"}}>
@@ -29,78 +17,30 @@ function Navbar() {
         <Toolbar disableGutters>
           <Link to="/" className='logo-link'>
             <ShoppingBagRoundedIcon sx={{ mr: 1, fontSize: 35 }} />
-            <Typography variant="h6" noWrap
-              sx={{ mr: 3, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem'}}
-            >
+            <Typography variant="h6" noWrap sx={{ mr: 3, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem'}}>
               TECH
             </Typography>
           </Link>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton size="large" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleOpenNavMenu} color='inherit'>
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-              keepMounted
-              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography sx={{ textAlign: 'center' }}>Home</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography sx={{ textAlign: 'center' }}>Products</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography sx={{ textAlign: 'center' }}>Cart</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography sx={{ textAlign: 'center' }}>Login</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography sx={{ textAlign: 'center' }}>Register</Typography>
-              </MenuItem>
-
-            </Menu>
-          </Box>
-
-          <ShoppingBagRoundedIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, fontSize: 35 }} />
-          <Typography variant="h5" noWrap component="a"
-            sx={{ mr: 2, display: { xs: 'flex', md: 'none' }, flexGrow: 1, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none'}}
-          >
-            TECH
-          </Typography>
-          
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: "flex"}}>
             <Link to="/">
-              <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
-                Home
-              </Button>
+              <Button color='inherit' sx={{ my: 2, color: 'white' }}>Home</Button>
             </Link>
-            <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
-              Products
-            </Button>
-            <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
-              Cart
-            </Button>
+            <Button color='inherit' sx={{ my: 2, color: 'white' }}>Products</Button>
+            <Button color='inherit' sx={{ my: 2, color: 'white' }}>Cart</Button>
 
             <Box sx={{flexGrow: 1, display: "flex", justifyContent: "flex-end"}}>
-              <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
-                Login
-              </Button>
-
-              <Link to="/register">
-                <Button color='inherit' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }}>
-                  Register
-                </Button>
-              </Link>
-
+              {
+                token ? <Button color='inherit' sx={{ my: 2, color: 'white' }}>Logout</Button> 
+                : <>
+                  <Link to="/login">
+                    <Button color='inherit' sx={{ my: 2, color: 'white' }}>Login</Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button color='inherit' sx={{ my: 2, color: 'white' }}>Register</Button>
+                  </Link>
+                </>
+              }
             </Box>
           </Box>
         </Toolbar>

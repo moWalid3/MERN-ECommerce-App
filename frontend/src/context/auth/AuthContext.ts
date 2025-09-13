@@ -8,5 +8,11 @@ interface IAuthContext {
   register: (formData: IRegisterForm) => Promise<string[] | null>;
 }
 
-export const AuthContext = createContext<IAuthContext | null>(null);
+export const AuthContext = createContext<IAuthContext>({
+  username: null,
+  token: null,
+  login: async () => null,
+  register: async () => null,
+});
+
 export const useAuth = () => useContext(AuthContext);
