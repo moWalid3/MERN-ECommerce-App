@@ -31,4 +31,29 @@ ul {
 .head-title {
   color: #37353E;
   font-weight: 600;
+  margin-top: 0;
+  font-size: 2rem;
+  text-align: center;
+}
+
+table.cart {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: .5rem;
+
+  td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even){background-color: #f2f2f2;}
+  
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #715A5A;
+    color: white;
+  }
 }

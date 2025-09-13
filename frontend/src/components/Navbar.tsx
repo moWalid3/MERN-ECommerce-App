@@ -7,6 +7,17 @@ import Button from '@mui/material/Button';
 import ShoppingBagRoundedIcon from '@mui/icons-material/ShoppingBagRounded';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/auth/AuthContext';
+import { IconButton } from '@mui/material';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { styled } from '@mui/material/styles';
+import Badge, { badgeClasses } from '@mui/material/Badge';
+
+const CartBadge = styled(Badge)`
+  & .${badgeClasses.badge} {
+    top: -12px;
+    right: -6px;
+  }
+`;
 
 function Navbar() {
   const { token, logout } = useAuth();
@@ -24,23 +35,31 @@ function Navbar() {
 
           <Box sx={{ flexGrow: 1, display: "flex"}}>
             <Link to="/">
-              <Button color='inherit' sx={{ my: 2, color: 'white' }}>Home</Button>
+              <Button color='inherit' sx={{color: 'white'}}>Home</Button>
             </Link>
-            <Button color='inherit' sx={{ my: 2, color: 'white' }}>Products</Button>
-            <Button color='inherit' sx={{ my: 2, color: 'white' }}>Cart</Button>
+            <Button color='inherit' sx={{color: 'white'}}>Products</Button>
+            <Button color='inherit' sx={{color: 'white'}}>Cart</Button>
 
             <Box sx={{flexGrow: 1, display: "flex", justifyContent: "flex-end"}}>
               {
                 token ?
-                  <Link onClick={logout} to="/login">
-                    <Button color='inherit' sx={{ my: 2, color: 'white' }}>Logout</Button> 
+                <>
+                  <Link to="/cart">
+                    <IconButton color='inherit' sx={{color: 'white', mr: 2}}>
+                      <AddShoppingCartIcon />
+                      <CartBadge badgeContent={2} color='info' overlap="circular" />
+                    </IconButton>
                   </Link>
-                : <>
+                  <Link onClick={logout} to="/login">
+                    <Button color='inherit' sx={{color: 'white'}}>Logout</Button> 
+                  </Link>
+                </> :
+                <>
                   <Link to="/login">
-                    <Button color='inherit' sx={{ my: 2, color: 'white' }}>Login</Button>
+                    <Button color='inherit' sx={{color: 'white'}}>Login</Button>
                   </Link>
                   <Link to="/register">
-                    <Button color='inherit' sx={{ my: 2, color: 'white' }}>Register</Button>
+                    <Button color='inherit' sx={{color: 'white'}}>Register</Button>
                   </Link>
                 </>
               }
