@@ -16,7 +16,7 @@ interface loginDto {
 export const register = async ({ name, email, password }: registerDto) => {
   const findUser = await userModel.findOne({ email });
 
-  if (findUser) return { status: 400, data: "User already exists!" };
+  if (findUser) return { status: 409, data: "Email already exists!" };
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,12 +31,12 @@ export const register = async ({ name, email, password }: registerDto) => {
 export const login = async ({ email, password }: loginDto) => {
   const findUser = await userModel.findOne({ email });
 
-  if (!findUser) return { status: 400, data: "Incorrect email or password!" };
+  if (!findUser) return { status: 401, data: "Incorrect email or password!" };
 
   const passwordMatch = await bcrypt.compare(password, findUser.password);
 
   if (!passwordMatch)
-    return { status: 400, data: "Incorrect email or password!" };
+    return { status: 401, data: "Incorrect email or password!" };
 
   return { status: 200, data: generateJWT({ name: findUser.name, email }) };
 };

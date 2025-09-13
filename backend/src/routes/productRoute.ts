@@ -6,6 +6,8 @@ import {
   getProducts,
   updateProduct,
 } from "../services/productService";
+import validateBodyData from "../middlewares/validateBodyData";
+import { body } from "express-validator";
 
 const router = express.Router();
 
@@ -28,14 +30,21 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  try {
-    const product = await addProduct(req.body);
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(400).json({ message: "Failed to add product", error });
+router.post(
+  "/",
+  validateBodyData([
+    body("title").notEmpty().withMessage("Title is required"),
+    body("price").notEmpty().withMessage("Price is required"),
+  ]),
+  async (req, res) => {
+    try {
+      const product = await addProduct(req.body);
+      res.status(201).json(product);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to add product", error });
+    }
   }
-});
+);
 
 router.put("/:id", async (req, res) => {
   try {

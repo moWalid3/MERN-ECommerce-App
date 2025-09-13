@@ -22,3 +22,13 @@ h1 {
   text-decoration: none;
   color: #DFD0B8;
 }
+
+ul {
+  padding-left: 1rem;
+  margin: 0;
+}
+
+.head-title {
+  color: #37353E;
+  font-weight: 600;
+}

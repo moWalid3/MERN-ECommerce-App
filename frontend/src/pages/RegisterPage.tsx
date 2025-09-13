@@ -1,53 +1,70 @@
-import { TextField, Button, Box, Typography } from "@mui/material";
-import { useRef, type FormEvent } from "react";
-import { BASE_URL } from "../constants/baseUrl";
-
-interface IRegister {
-  name: string;
-  email: string;
-  password: string;
-}
+import { TextField, Button, Box, Typography, Alert } from "@mui/material";
+import { useRef, useState, type FormEvent } from "react";
+import { useAuth } from "../context/auth/AuthContext";
+import type { IRegisterForm } from "../types/Auth";
+import Joi from "joi";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [validationErrors, setValidationErrors] = useState<{msg: string, path: string | number}[]>([]);
+  const [generalErrors, setGeneralErrors] = useState<string[]>([]);
+  
+  const navigate = useNavigate();
+  const auth = useAuth();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const registerSchema = Joi.object({
+    name: Joi.string().alphanum().min(3).max(100).required().messages({
+      "string.min": "Name must have at least 3 characters",
+      "string.max": "Name cannot exceed 100 characters",
+      "string.empty": "Name is required",
+    }),
+    email: Joi.string().email({ tlds: { allow: false } }).required().messages({
+      "string.email": "Please provide a valid email address",
+      "string.empty": "Email is required",
+    }),
+    password: Joi.string().min(3).required().messages({
+      "string.min": "Password must have at least 3 characters",
+      "string.empty": "password is required",
+    }),
+  });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if(!nameRef.current || !emailRef.current || !passwordRef.current) return;
 
-    const formData: IRegister = {
+    if(!nameRef.current || !emailRef.current || !passwordRef.current) {
+      setGeneralErrors(["Something wrong when get input values"]);
+      return;
+    }
+    
+    const formData: IRegisterForm = {
       name: nameRef.current?.value,
       email: emailRef.current?.value,
       password: passwordRef.current?.value,
     }
-    register(formData);
-  }
 
-  const register = async (formData: IRegister) => {
-    try {
-      const res = await fetch(`${BASE_URL}/user/register`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(formData)
-      });
-      console.log(await res.json());
+    const { error } = registerSchema.validate(formData, { abortEarly: false });
 
-      if(res.ok) {
-
-        if(!nameRef.current || !emailRef.current || !passwordRef.current) return;
-        
-        nameRef.current.value = '';
-        emailRef.current.value = '';
-        passwordRef.current.value = '';
-      }
-    
-    } catch (error) {
-      console.log(error);
+    setValidationErrors([]);
+    if(error?.details) {
+      setValidationErrors(error.details.map(err => ({msg: err.message, path: err.path[0]})));
+      return;
     }
+    
+    const result = await auth?.register(formData);
+
+    if(result != null) {
+      setGeneralErrors([...result])
+      return;
+    }
+
+    setGeneralErrors([]);
+    navigate("/");
   }
+
+  const foundErrorMsg = (path: string) => validationErrors.find(err => err.path === path)?.msg;
 
   return ( <>
     <Box
@@ -55,7 +72,6 @@ const RegisterPage = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 2,
         alignItems: "center",
         p: 4,
         border: "1px solid #ccc",
@@ -67,15 +83,36 @@ const RegisterPage = () => {
       autoComplete="off"
       onSubmit={handleSubmit}
     >
-      <Typography variant="h5" gutterBottom>
-        Register
-      </Typography>
-      <TextField inputRef={nameRef} label="Name" name="name" fullWidth />
-      <TextField inputRef={emailRef} label="Email" type="email" name="email" fullWidth />
-      <TextField inputRef={passwordRef} label="Password" type="password" name="password" fullWidth />
-      <Button variant="outlined" type="submit" sx={{ mt: 2, width: "50%" }}>
-        Submit
-      </Button>
+      {
+        generalErrors.length > 0 && <Alert severity="error" sx={{width: "100%", border: "1px solid #FF8488"}}>
+          <ul>{ generalErrors.map(err => <li>{err}</li> ) }</ul>
+        </Alert>
+      }
+      
+      <Typography variant="h5" gutterBottom className="head-title">Register</Typography>
+
+      <TextField inputRef={nameRef} label="Name" name="name" fullWidth sx={{mt: 2}} />
+      {
+        foundErrorMsg("name") && <Typography variant="body2" color="error" sx={{width: "100%", pt: ".25rem"}}>
+          {foundErrorMsg("name")}
+        </Typography>
+      }
+
+      <TextField inputRef={emailRef} label="Email" type="email" name="email" fullWidth sx={{mt: 2}} />
+      {
+        foundErrorMsg("email") && <Typography variant="body2" color="error" sx={{width: "100%", pt: ".25rem"}}>
+          {foundErrorMsg("email")}
+        </Typography>
+      }
+
+      <TextField inputRef={passwordRef} label="Password" type="password" name="password" fullWidth sx={{mt: 2}} />
+      {
+        foundErrorMsg("password") && <Typography variant="body2" color="error" sx={{width: "100%", pt: ".25rem"}}>
+          {foundErrorMsg("password")}
+        </Typography>
+      }
+
+      <Button variant="outlined" type="submit" sx={{ mt: 2, width: "50%" }}>Submit</Button>
     </Box>
   </> );
 }
