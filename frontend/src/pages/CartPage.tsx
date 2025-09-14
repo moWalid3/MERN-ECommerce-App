@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { Button, Container, Typography } from '@mui/material';
 
 const CartPage = () => {
-  const { cart, updateCartItem, removeCartItem } = useCart();
+  const { cart, updateCartItem, removeCartItem, clearCart } = useCart();
 
   const updateQuantity = (productId: string, quantity: number) => {
     if(quantity < 1) removeCartItem(productId);
@@ -23,7 +23,10 @@ const CartPage = () => {
         </>
       ) : (
         <Container fixed style={{overflowX: 'auto'}}>
-          <h2 className="head-title">Cart</h2>
+          <h2 className="head-title">Your Cart</h2>
+          <Button onClick={clearCart} variant='contained' color='error' size='large' sx={{ml: 'auto', display: 'block', mb: 1}}>
+            Clear Cart
+          </Button>
           <table className="cart">
             <thead>
               <tr>
@@ -38,7 +41,9 @@ const CartPage = () => {
             <tbody>
               {cart.items.map((item) => (
                 <tr key={item._id}>
-                  <td onClick={() => removeCartItem(item.productId._id)} width={1}> <IconButton color='error'><DeleteIcon /></IconButton> </td>
+                  <td width={1}> 
+                    <IconButton onClick={() => removeCartItem(item.productId._id)} color='error'><DeleteIcon /></IconButton>
+                  </td>
                   <td><img src={item.productId.image} /></td>
                   <td>{item.productId.title}</td>
                   <td className="price">${item.productId.price}</td>

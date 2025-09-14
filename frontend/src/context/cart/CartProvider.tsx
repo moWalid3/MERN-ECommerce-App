@@ -21,7 +21,6 @@ const CartProvider = (props: PropsWithChildren) => {
       });
   
       const result = await res.json();
-      console.log(result);
 
       if(res.ok) {
         setCart(result);
@@ -48,7 +47,6 @@ const CartProvider = (props: PropsWithChildren) => {
       });
   
       const result = await res.json();
-      console.log(result);
 
       if(res.ok) {
         setCart(result);
@@ -73,11 +71,34 @@ const CartProvider = (props: PropsWithChildren) => {
       });
   
       const result = await res.json();
-      console.log(result);
 
       if(res.ok) {
         setCart(result);
         toast.success('Product successfully removed!', { duration: 3000});
+        return;
+      }
+
+      toast.error(result.message);
+    } catch(error) {
+      console.error(error);
+      toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
+    }
+  }
+
+  const clearCart = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/cart`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const result = await res.json();
+
+      if(res.ok) {
+        setCart(result);
+        toast.success('Your Cart successfully cleared!', { duration: 3000});
         return;
       }
 
@@ -95,7 +116,6 @@ const CartProvider = (props: PropsWithChildren) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        console.log(data);
 
         if(res.ok) {
           setCart(data);
@@ -114,7 +134,9 @@ const CartProvider = (props: PropsWithChildren) => {
   }, [getCart]);
 
   return (
-    <CartContext.Provider value={{ addCartItem, updateCartItem, removeCartItem, getCart, cart }}>{props.children}</CartContext.Provider>
+    <CartContext.Provider value={{ addCartItem, updateCartItem, removeCartItem, getCart, clearCart, cart }}>
+      {props.children}
+    </CartContext.Provider>
   );
 };
 
