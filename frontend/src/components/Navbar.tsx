@@ -39,13 +39,20 @@ function Navbar() {
             <Link to="/">
               <Button color='inherit' sx={{color: 'white'}}>Home</Button>
             </Link>
-            <Button color='inherit' sx={{color: 'white'}}>Products</Button>
-            <Button color='inherit' sx={{color: 'white'}}>Cart</Button>
+            {
+              token && <>
+                <Link to="/">
+                  <Button color='inherit' sx={{color: 'white'}}>Products</Button>
+                </Link>
+                <Link to="/orders">
+                  <Button color='inherit' sx={{color: 'white'}}>Orders</Button>
+                </Link>
+              </>
+            }
 
             <Box sx={{flexGrow: 1, display: "flex", justifyContent: "flex-end"}}>
               {
-                token ?
-                <>
+                token ? <>
                   <Link to="/cart">
                     <IconButton color='inherit' sx={{color: 'white', mr: 2}}>
                       <AddShoppingCartIcon />
@@ -55,8 +62,7 @@ function Navbar() {
                   <Link onClick={logout} to="/login">
                     <Button color='inherit' sx={{color: 'white'}}>Logout</Button> 
                   </Link>
-                </> :
-                <>
+                </> : <>
                   <Link to="/login">
                     <Button color='inherit' sx={{color: 'white'}}>Login</Button>
                   </Link>
