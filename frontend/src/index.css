@@ -90,7 +90,7 @@ img.empty-cart {
   gap: 16px;
   max-width: 800px;
   margin: auto;
-  
+
   .order-card {
     background: #fff;
     padding: 16px;
@@ -128,5 +128,33 @@ img.empty-cart {
   .address {
     font-size: 14px;
     color: #555;
+  }
+}
+
+.update-product-box {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: auto;
+  background-color: white;
+
+  label {
+    margin: 1rem 0 0.25rem;
+  }
+
+  input {
+    padding: 0.6rem .75rem;
+    font-size: 1rem;
+    border: 2px solid #c8bdf6;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus {
+    border-color: #7b5cff;
   }
 }

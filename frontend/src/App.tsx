@@ -10,30 +10,39 @@ import CartProvider from "./context/cart/CartProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrdersPage from "./pages/OrdersPage";
+import ProductProvider from "./context/product/ProductProvider";
+import ProductsPage from "./pages/ProductsPage";
+import AddProductPage from "./pages/AddProductPage";
+import UpdateProductPage from "./pages/UpdateProductPage";
 
 function App() {
   return (
     <>
       <LoadingProvider>
         <AuthProvider>
-          <CartProvider>
-            <BrowserRouter>
+          <ProductProvider>
+            <CartProvider>
+              <BrowserRouter>
 
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<HomePage />} />
-                  <Route path="register" element={<RegisterPage />} />
-                  <Route path="login" element={<LoginPage />} />
-                  <Route element={<ProtectedRoute />}>
-                    <Route path="cart" element={<CartPage />} />
-                    <Route path="checkout" element={<CheckoutPage />} />
-                    <Route path="orders" element={<OrdersPage />} />
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<HomePage />} />
+                    <Route path="register" element={<RegisterPage />} />
+                    <Route path="login" element={<LoginPage />} />
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="cart" element={<CartPage />} />
+                      <Route path="checkout" element={<CheckoutPage />} />
+                      <Route path="orders" element={<OrdersPage />} />
+                      <Route path="products" element={<ProductsPage />} />
+                      <Route path="add-product" element={<AddProductPage />} />
+                      <Route path="update-product/:id" element={<UpdateProductPage />} />
+                    </Route>
                   </Route>
-                </Route>
-              </Routes>
+                </Routes>
 
-            </BrowserRouter>
-          </CartProvider>
+              </BrowserRouter>
+            </CartProvider>
+          </ProductProvider>
         </AuthProvider>
       </LoadingProvider>
     </>

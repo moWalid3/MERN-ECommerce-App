@@ -10,6 +10,11 @@ const CartProvider = (props: PropsWithChildren) => {
   const { token } = useAuth();
 
   const addCartItem = async (productId: string) => {
+    if(!token) {
+      toast("You need to login first!", {icon: 'ℹ️'});
+      return;
+    }
+
     try {
       const res = await fetch(`${BASE_URL}/cart/items`, {
         method: "POST",
@@ -149,7 +154,7 @@ const CartProvider = (props: PropsWithChildren) => {
         }
       } catch (error) {
         console.error(error);
-        toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
+        toast.error("Something wrong in the server! Please try again later");
       }
     } else {
       setCart(null);

@@ -8,6 +8,7 @@ import {
 } from "../services/productService";
 import validateBodyData from "../middlewares/validateBodyData";
 import { body } from "express-validator";
+import validateJWT from "../middlewares/validateJWT";
 
 const router = express.Router();
 
@@ -32,6 +33,7 @@ router.get("/:id", async (req, res) => {
 
 router.post(
   "/",
+  validateJWT,
   validateBodyData([
     body("title").notEmpty().withMessage("Title is required"),
     body("price").notEmpty().withMessage("Price is required"),
@@ -46,8 +48,10 @@ router.post(
   }
 );
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateJWT, async (req, res) => {
   try {
+    if (!req.params.id)
+      return res.status(404).json({ message: "Product not found" });
     const updated = await updateProduct(req.params.id, req.body);
     if (!updated) return res.status(404).json({ message: "Product not found" });
     res.json(updated);
@@ -56,8 +60,10 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", validateJWT, async (req, res) => {
   try {
+    if (!req.params.id)
+      return res.status(404).json({ message: "Product not found" });
     const deleted = await deleteProduct(req.params.id);
     if (!deleted) return res.status(404).json({ message: "Product not found" });
     res.json({ message: "Product deleted successfully" });

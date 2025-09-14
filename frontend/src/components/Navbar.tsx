@@ -41,7 +41,7 @@ function Navbar() {
             </Link>
             {
               token && <>
-                <Link to="/">
+                <Link to="/products">
                   <Button color='inherit' sx={{color: 'white'}}>Products</Button>
                 </Link>
                 <Link to="/orders">
