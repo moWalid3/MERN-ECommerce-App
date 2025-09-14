@@ -13,14 +13,27 @@ h1 {
 }
 
 .price {
-  color: #E9AE0B;
+  color: #d8a10b;
+  font-size: 1.25rem;
+}
+
+.total {
+  color: #aa7f0b;
+  font-size: 1.25rem;
+}
+
+.quantity {
+  display: inline-block;
+  width: 2.5rem;
+  height: 1.25rem;
+  font-weight: 600;
 }
 
 .logo-link {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #DFD0B8;
+  color: #dfd0b8;
 }
 
 ul {
@@ -29,7 +42,7 @@ ul {
 }
 
 .head-title {
-  color: #37353E;
+  color: #37353e;
   font-weight: 600;
   margin-top: 0;
   font-size: 2rem;
@@ -40,20 +53,22 @@ table.cart {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  border-radius: .5rem;
   text-align: center;
-  
-  td, th {
+
+  td,
+  th {
     border: 1px solid #ddd;
     padding: 8px;
   }
-  
-  tr{background-color: #fff;}
-  
+
+  tr {
+    background-color: #fff;
+  }
+
   th {
     padding-top: 12px;
     padding-bottom: 12px;
-    background-color: #715A5A;
+    background-color: #715a5a;
     color: white;
   }
 
