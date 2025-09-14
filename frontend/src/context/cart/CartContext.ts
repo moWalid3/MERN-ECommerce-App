@@ -5,6 +5,7 @@ interface ICartContext {
   cart: ICart | null;
   addCartItem: (productId: string) => Promise<void>;
   updateCartItem: (data: IUpdateCartItem) => Promise<void>;
+  removeCartItem: (productId: string) => Promise<void>;
   getCart: () => Promise<void>
 }
 
@@ -12,6 +13,7 @@ export const CartContext = createContext<ICartContext>({
   cart: null,
   addCartItem: async () => {},
   updateCartItem: async () => {},
+  removeCartItem: async () => {},
   getCart: async () => {},
 });
 export const useCart = () => useContext(CartContext);

@@ -7,7 +7,12 @@ import Box from '@mui/material/Box';
 import { Button, Container, Typography } from '@mui/material';
 
 const CartPage = () => {
-  const { cart, updateCartItem } = useCart();
+  const { cart, updateCartItem, removeCartItem } = useCart();
+
+  const updateQuantity = (productId: string, quantity: number) => {
+    if(quantity < 1) removeCartItem(productId);
+    else updateCartItem({ productId, quantity });
+  }
 
   return (
     <>
@@ -33,17 +38,17 @@ const CartPage = () => {
             <tbody>
               {cart.items.map((item) => (
                 <tr key={item._id}>
-                  <td width={1}> <IconButton color='error'><DeleteIcon /></IconButton> </td>
+                  <td onClick={() => removeCartItem(item.productId._id)} width={1}> <IconButton color='error'><DeleteIcon /></IconButton> </td>
                   <td><img src={item.productId.image} /></td>
                   <td>{item.productId.title}</td>
                   <td className="price">${item.productId.price}</td>
                   <td style={{width: '11rem'}}>
                     <IconButton 
-                      onClick={() => updateCartItem({productId: item.productId._id, quantity: item.quantity - 1})} 
-                      > <RemoveIcon /></IconButton>
+                      onClick={() => updateQuantity(item.productId._id, item.quantity - 1)} 
+                    ><RemoveIcon /></IconButton>
                     <span className='quantity'>{item.quantity}</span>
                     <IconButton 
-                      onClick={() => updateCartItem({productId: item.productId._id, quantity: item.quantity + 1})} 
+                      onClick={() => updateQuantity(item.productId._id, item.quantity + 1)} 
                     ><AddIcon /></IconButton>
                   </td>
                   <td className='total'>${ item.productId.price * item.quantity }</td>
