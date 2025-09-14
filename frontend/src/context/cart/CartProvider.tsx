@@ -9,32 +9,6 @@ const CartProvider = (props: PropsWithChildren) => {
   const [cart, setCart] = useState<ICart | null>(null);
   const { token } = useAuth();
 
-  const getCart = useCallback(async () => {
-    if(token) {
-      try {
-        const res = await fetch(`${BASE_URL}/cart`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        console.log(data);
-
-        if(res.ok) {
-          setCart(data);
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
-      }
-    } else {
-      setCart(null);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    console.log("form cart provider in use effect");
-    getCart();
-  }, [getCart]);
-
   const addCartItem = async (data: IAddCartItem) => {
     try {
       const res = await fetch(`${BASE_URL}/cart/items`, {
@@ -59,6 +33,31 @@ const CartProvider = (props: PropsWithChildren) => {
       return "Something wrong in the server! Please try again later";
     }
   };
+
+  const getCart = useCallback(async () => {
+    if(token) {
+      try {
+        const res = await fetch(`${BASE_URL}/cart`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        console.log(data);
+
+        if(res.ok) {
+          setCart(data);
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
+      }
+    } else {
+      setCart(null);
+    }
+  }, [token]);
+  
+  useEffect(() => {
+    getCart();
+  }, [getCart]);
 
   return (
     <CartContext.Provider value={{ addCartItem, getCart, cart }}>{props.children}</CartContext.Provider>

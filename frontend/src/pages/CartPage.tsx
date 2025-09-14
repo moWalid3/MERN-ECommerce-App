@@ -6,7 +6,12 @@ const CartPage = () => {
 
   return (
     <>
-      {cart && (
+      {!cart || cart.items.length === 0 ? (
+        <>
+          <img src="emptyCart.png" className="empty-cart" alt="Empty cart" />
+          <h2 className="head-title">Your cart is empty</h2>
+        </>
+      ) : (
         <>
           <h2 className="head-title">Cart</h2>
           <table className="cart">
@@ -19,14 +24,14 @@ const CartPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cart.items.length > 0 && cart.items.map(item =>
+              {cart.items.map((item) => (
                 <tr key={item._id}>
                   <td><img src={(item.productId as IProduct).image} /></td>
-                  <td>{ (item.productId as IProduct).title }</td>
-                  <td>${ (item.productId as IProduct).price }</td>
-                  <td>{ item.quantity }</td>
+                  <td>{(item.productId as IProduct).title}</td>
+                  <td>${(item.productId as IProduct).price}</td>
+                  <td>{item.quantity}</td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </>
