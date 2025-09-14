@@ -22,7 +22,7 @@ const CartBadge = styled(Badge)`
 
 function Navbar() {
   const { token, logout } = useAuth();
-  const { cart } = useCart();
+  const { cart, getCart } = useCart();
 
   return (
     <AppBar position="static" color='secondary' sx={{background: "#37353E", boxShadow: "none"}}>
@@ -46,7 +46,7 @@ function Navbar() {
               {
                 token ?
                 <>
-                  <Link to="/cart">
+                  <Link onClick={getCart} to="/cart">
                     <IconButton color='inherit' sx={{color: 'white', mr: 2}}>
                       <AddShoppingCartIcon />
                       <CartBadge badgeContent={cart ? cart.items.length.toString() : '0'} color='info' overlap="circular" />

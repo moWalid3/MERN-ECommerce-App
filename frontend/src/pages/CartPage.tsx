@@ -4,8 +4,6 @@ import type { IProduct } from "../types/Product";
 const CartPage = () => {
   const { cart } = useCart();
 
-  // todo fix -> refetch get cart to do populate and get all products
-
   return (
     <>
       {cart && (

@@ -1,4 +1,4 @@
-import { useEffect, useState, type PropsWithChildren } from "react";
+import { useCallback, useEffect, useState, type PropsWithChildren } from "react";
 import { CartContext } from "./CartContext";
 import { useAuth } from "../auth/AuthContext";
 import { BASE_URL } from "../../constants/baseUrl";
@@ -9,30 +9,31 @@ const CartProvider = (props: PropsWithChildren) => {
   const [cart, setCart] = useState<ICart | null>(null);
   const { token } = useAuth();
 
-  useEffect(() => {
-    const fetchCart =  async () => {
-      if(token) {
-        try {
-          const res = await fetch(`${BASE_URL}/cart`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const data = await res.json();
-          console.log(data);
+  const getCart = useCallback(async () => {
+    if(token) {
+      try {
+        const res = await fetch(`${BASE_URL}/cart`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        console.log(data);
 
-          if(res.ok) {
-            setCart(data);
-          }
-        } catch (error) {
-          console.error(error);
-          toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
+        if(res.ok) {
+          setCart(data);
         }
-      } else {
-        setCart(null);
+      } catch (error) {
+        console.error(error);
+        toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
       }
-    };
-
-    fetchCart();
+    } else {
+      setCart(null);
+    }
   }, [token]);
+
+  useEffect(() => {
+    console.log("form cart provider in use effect");
+    getCart();
+  }, [getCart]);
 
   const addCartItem = async (data: IAddCartItem) => {
     try {
@@ -60,7 +61,7 @@ const CartProvider = (props: PropsWithChildren) => {
   };
 
   return (
-    <CartContext.Provider value={{ addCartItem, cart }}>{props.children}</CartContext.Provider>
+    <CartContext.Provider value={{ addCartItem, getCart, cart }}>{props.children}</CartContext.Provider>
   );
 };
 
