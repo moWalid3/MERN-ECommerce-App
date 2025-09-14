@@ -14,7 +14,7 @@ export interface ICartItem {
   quantity: number;
 }
 
-export interface IAddCartItem {
+export interface IUpdateCartItem {
   productId: string;
   quantity: number;
 }

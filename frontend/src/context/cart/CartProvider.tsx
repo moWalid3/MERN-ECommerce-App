@@ -2,18 +2,18 @@ import { useCallback, useEffect, useState, type PropsWithChildren } from "react"
 import { CartContext } from "./CartContext";
 import { useAuth } from "../auth/AuthContext";
 import { BASE_URL } from "../../constants/baseUrl";
-import type { IAddCartItem, ICart } from "../../types/Cart";
+import type { ICart } from "../../types/Cart";
 import toast from "react-hot-toast";
 
 const CartProvider = (props: PropsWithChildren) => {
   const [cart, setCart] = useState<ICart | null>(null);
   const { token } = useAuth();
 
-  const addCartItem = async (data: IAddCartItem) => {
+  const addCartItem = async (productId: string) => {
     try {
       const res = await fetch(`${BASE_URL}/cart/items`, {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify({ productId, quantity: 1 }),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -24,13 +24,14 @@ const CartProvider = (props: PropsWithChildren) => {
 
       if(res.ok) {
         setCart(result);
-        return null;
+        toast.success('Product successfully added!', { duration: 3000});
+        return;
       }
 
-      return result.message;
+      toast(result.message, { duration: 3000, icon: "ℹ️"});
     } catch(error) {
       console.error(error);
-      return "Something wrong in the server! Please try again later";
+      toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
     }
   };
 
