@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useCart } from "../context/cart/CartContext";
 import Box from '@mui/material/Box';
 import { Button, Container, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const CartPage = () => {
   const { cart, updateCartItem, removeCartItem, clearCart } = useCart();
@@ -65,7 +66,9 @@ const CartPage = () => {
             <Typography variant='h5'>
               Total: <span className='total' style={{fontSize: '1.75rem'}}>${ cart.totalAmount }</span>
             </Typography>
-            <Button variant='contained' color='success' size='large'>Checkout</Button>
+            <Link to="/checkout">
+              <Button variant='contained' color='success' size='large'>Checkout</Button>
+            </Link>
           </Box>
         </Container>
       )}

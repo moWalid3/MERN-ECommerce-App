@@ -109,6 +109,32 @@ const CartProvider = (props: PropsWithChildren) => {
     }
   }
 
+  const checkout = async (address: string) => {
+    try {
+      const res = await fetch(`${BASE_URL}/cart/items`, {
+        method: "POST",
+        body: JSON.stringify({ address }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const result = await res.json();
+
+      if(res.ok) {
+        console.log(result);
+        toast.success('Product successfully updated!', { duration: 3000});
+        return;
+      }
+
+      toast.error(result.message);
+    } catch(error) {
+      console.error(error);
+      toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
+    }
+  }
+
   const getCart = useCallback(async () => {
     if(token) {
       try {
