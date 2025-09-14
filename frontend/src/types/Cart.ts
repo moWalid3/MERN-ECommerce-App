@@ -10,7 +10,7 @@ export interface ICart {
 
 export interface ICartItem {
   _id: string,
-  productId: string | IProduct;
+  productId: IProduct;
   quantity: number;
 }
 

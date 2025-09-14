@@ -54,6 +54,8 @@ table.cart {
   border-collapse: collapse;
   width: 100%;
   text-align: center;
+  min-width: 40rem;
+  width: 100%;
 
   td,
   th {

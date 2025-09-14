@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, type PropsWithChildren } from "react"
 import { CartContext } from "./CartContext";
 import { useAuth } from "../auth/AuthContext";
 import { BASE_URL } from "../../constants/baseUrl";
-import type { ICart } from "../../types/Cart";
+import type { ICart, IUpdateCartItem } from "../../types/Cart";
 import toast from "react-hot-toast";
 
 const CartProvider = (props: PropsWithChildren) => {
@@ -21,7 +21,8 @@ const CartProvider = (props: PropsWithChildren) => {
       });
   
       const result = await res.json();
-
+      console.log(result);
+      
       if(res.ok) {
         setCart(result);
         toast.success('Product successfully added!', { duration: 3000});
@@ -34,6 +35,33 @@ const CartProvider = (props: PropsWithChildren) => {
       toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
     }
   };
+
+  const updateCartItem = async (data: IUpdateCartItem) => {
+    try {
+      const res = await fetch(`${BASE_URL}/cart/items`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const result = await res.json();
+      console.log(result);
+
+      if(res.ok) {
+        setCart(result);
+        toast.success('Product successfully updated!', { duration: 3000});
+        return;
+      }
+
+      toast.error(result.message);
+    } catch(error) {
+      console.error(error);
+      toast.error("Something wrong in the server! Please try again later", { duration: 3000 });
+    }
+  }
 
   const getCart = useCallback(async () => {
     if(token) {
@@ -61,7 +89,7 @@ const CartProvider = (props: PropsWithChildren) => {
   }, [getCart]);
 
   return (
-    <CartContext.Provider value={{ addCartItem, getCart, cart }}>{props.children}</CartContext.Provider>
+    <CartContext.Provider value={{ addCartItem, updateCartItem, getCart, cart }}>{props.children}</CartContext.Provider>
   );
 };
 

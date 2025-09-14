@@ -41,6 +41,7 @@ export const addToCart = async ({ userId, productId, quantity }: AddToCart) => {
       items: [{ productId, quantity }],
       totalAmount: product.price * quantity,
     });
+    await newCart.populate("items.productId");
     return { status: 201, data: newCart };
   }
 
@@ -56,8 +57,8 @@ export const addToCart = async ({ userId, productId, quantity }: AddToCart) => {
     quantity,
   });
   cart.totalAmount += product.price * quantity;
-  const updatedCart = await cart.save();
-
+  await cart.save();
+  const updatedCart = await cart.populate("items.productId");
   return { status: 201, data: updatedCart };
 };
 
@@ -103,7 +104,8 @@ export const updateCartItem = async ({
   cart.totalAmount += newTotalItemPrice;
 
   cart.items[itemIndex].quantity = quantity;
-  const updatedCart = await cart.save();
+  await cart.save();
+  const updatedCart = await cart.populate("items.productId");
   return { status: 200, data: updatedCart };
 };
 
@@ -130,7 +132,8 @@ export const deleteCartItem = async ({ productId, userId }: DeleteCartItem) => {
 
   cart.totalAmount -= cart.items[itemIndex].quantity * product.price;
   cart.items.splice(itemIndex, 1);
-  const updatedCart = await cart.save();
+  await cart.save();
+  const updatedCart = await cart.populate("items.productId");
   return { status: 200, data: updatedCart };
 };
 
