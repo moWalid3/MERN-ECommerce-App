@@ -111,7 +111,7 @@ const CartProvider = (props: PropsWithChildren) => {
 
   const checkout = async (address: string) => {
     try {
-      const res = await fetch(`${BASE_URL}/cart/items`, {
+      const res = await fetch(`${BASE_URL}/cart/checkout`, {
         method: "POST",
         body: JSON.stringify({ address }),
         headers: {
@@ -124,7 +124,8 @@ const CartProvider = (props: PropsWithChildren) => {
 
       if(res.ok) {
         console.log(result);
-        toast.success('Product successfully updated!', { duration: 3000});
+        setCart(null);
+        toast.success('Checkout successful! Your order is on its way. Thank you for shopping with us!');
         return;
       }
 
@@ -160,7 +161,9 @@ const CartProvider = (props: PropsWithChildren) => {
   }, [getCart]);
 
   return (
-    <CartContext.Provider value={{ addCartItem, updateCartItem, removeCartItem, getCart, clearCart, cart }}>
+    <CartContext.Provider 
+      value={{ addCartItem, updateCartItem, removeCartItem, getCart, clearCart, checkout, cart }}
+    >
       {props.children}
     </CartContext.Provider>
   );

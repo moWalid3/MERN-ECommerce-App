@@ -5,24 +5,21 @@ import toast from "react-hot-toast";
 import { useCart } from "../context/cart/CartContext";
 
 const CheckoutPage = () => {
-  const { cart } = useCart();
+  const { cart, checkout } = useCart();
   const addressRef = useRef<HTMLInputElement>(null);
   
   if(!cart || cart.items.length === 0) {
     return <Navigate to="/" replace />
   }
-
+  
   const handleSubmit = async () => {
     if(!addressRef?.current?.value) {
       toast("Address is required!", {icon: 'ℹ️'})
       return;
     }
-    
     const address = addressRef.current.value;
 
-    console.log(address);
-
-    // navigate("/");
+    await checkout(address);
   }
 
   return ( <>

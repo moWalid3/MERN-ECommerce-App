@@ -159,11 +159,8 @@ export const checkout = async ({ userId, address }: Checkout) => {
 
   const orderItems: IOrderItem[] = [];
 
-  const productIds = cart.items.map((item) => item.productId);
-  const products = await productModel.find({ _id: productIds });
-
   for (const item of cart.items) {
-    const product = products.find((p) => p._id == item.productId);
+    const product = await productModel.findById(item.productId);
 
     if (!product) return { status: 400, data: "Product not found!" };
 

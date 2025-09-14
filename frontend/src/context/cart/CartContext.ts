@@ -8,6 +8,7 @@ interface ICartContext {
   removeCartItem: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>
   getCart: () => Promise<void>
+  checkout: (address: string) => Promise<void>
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -17,5 +18,6 @@ export const CartContext = createContext<ICartContext>({
   removeCartItem: async () => {},
   clearCart: async () => {},
   getCart: async () => {},
+  checkout: async () => {},
 });
 export const useCart = () => useContext(CartContext);
